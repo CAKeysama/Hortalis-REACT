@@ -2,7 +2,7 @@ import { Welcome } from "../welcome/welcome";
 
 export function meta({}) {
   return [
-    { title: "TESTE DO RYAN X MATHEUS" },
+    { title: "TESTE GUSTAVO X DAN" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
