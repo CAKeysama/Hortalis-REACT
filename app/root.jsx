@@ -6,10 +6,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Toaster } from "react-hot-toast";
 
 import "./app.css";
+import { AuthProvider } from "./contexts/AuthContext";
 
 export const links = () => [
+  { rel: "icon", href: "/Icon.svg", type: "image/svg+xml" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -18,7 +21,7 @@ export const links = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Poppins:wght@400;600;700;800&display=swap",
   },
 ];
 
@@ -31,8 +34,23 @@ export function Layout({ children }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="font-sans text-slate-900">
+        <AuthProvider>
+          {children}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3800,
+              style: {
+                borderRadius: "16px",
+                background: "#ffffff",
+                color: "#0D0D0D",
+                border: "1px solid rgba(13,13,13,0.1)",
+                boxShadow: "0 12px 30px rgba(13,13,13,0.12)",
+              },
+            }}
+          />
+        </AuthProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
