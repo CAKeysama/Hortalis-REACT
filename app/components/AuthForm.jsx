@@ -11,9 +11,12 @@ export default function AuthForm({
   onFocusChange,
   onSignupSuccess,
   onAuthSuccess,
+  initialMode = "login",
 }) {
   const { signIn, signUp } = useAuth();
-  const [mode, setMode] = useState("login");
+  const normalizedInitialMode =
+    initialMode === "signup" ? "signup" : "login";
+  const [mode, setMode] = useState(normalizedInitialMode);
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -29,6 +32,18 @@ export default function AuthForm({
       onFocusChange(focusCount > 0);
     }
   }, [focusCount, onFocusChange]);
+
+  useEffect(() => {
+    setMode(normalizedInitialMode);
+    setShowPassword(false);
+    setShowConfirm(false);
+    setFocusCount(0);
+    setFormValues((prev) => ({
+      ...prev,
+      password: "",
+      confirmPassword: "",
+    }));
+  }, [normalizedInitialMode]);
 
   const updateField = (field) => (event) => {
     setFormValues((prev) => ({ ...prev, [field]: event.target.value }));

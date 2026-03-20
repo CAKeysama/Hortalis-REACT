@@ -1,9 +1,18 @@
-﻿import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
+﻿import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { Link } from "react-router";
 
 import FilterPanel from "../components/FilterPanel";
 import MapView from "../components/MapView";
 import SearchBar from "../components/SearchBar";
 import { HORTAS_MOCK } from "../data/hortas";
+import { useAuth } from "../hooks/useAuth";
 
 const SEARCH_DEBOUNCE_MS = 400;
 const MapDetailsModal = lazy(() => import("../components/MapDetailsModal"));
@@ -13,6 +22,7 @@ export default function MapPage() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedHorta, setSelectedHorta] = useState(null);
+  const { user, initializing } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,6 +57,45 @@ export default function MapPage() {
     [filteredHortas, handleOpenDetails]
   );
 
+  const authActions = initializing ? (
+    <div className="rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-slate-400">
+      Carregando
+    </div>
+  ) : user ? (
+    <Link
+      to="/perfil"
+      aria-label="Abrir perfil"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-hortalis-forest/20 bg-white text-hortalis-forest transition hover:border-hortalis-forest hover:bg-hortalis-forest hover:text-white"
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <path d="M20 21a8 8 0 10-16 0" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </Link>
+  ) : (
+    <>
+      <Link
+        to="/auth"
+        className="rounded-full border border-hortalis-forest/20 bg-white px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-hortalis-forest transition hover:border-hortalis-forest hover:bg-hortalis-forest hover:text-white"
+      >
+        Entrar
+      </Link>
+      <Link
+        to="/auth?mode=signup"
+        className="rounded-full bg-hortalis-leaf px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-white shadow-sm shadow-hortalis-leaf/20 transition hover:bg-hortalis-forest"
+      >
+        Cadastrar
+      </Link>
+    </>
+  );
+
   return (
     <main className="min-h-screen bg-hortalis-ice text-hortalis-ink">
       <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-white/70 bg-hortalis-ice/95 backdrop-blur">
@@ -61,6 +110,7 @@ export default function MapPage() {
             onToggleFilters={() => setFiltersOpen((open) => !open)}
             filtersOpen={filtersOpen}
             controlsId={panelId}
+            actions={authActions}
           />
           <FilterPanel open={filtersOpen} id={panelId} />
         </div>

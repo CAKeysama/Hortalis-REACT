@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
+﻿import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 
 import AuthForm from "../components/AuthForm";
 import { useAuth } from "../hooks/useAuth";
@@ -7,6 +7,10 @@ import { useAuth } from "../hooks/useAuth";
 export default function AuthPage() {
   const { user, initializing } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const modeParam = searchParams.get("mode");
+  const initialMode = modeParam === "signup" ? "signup" : "login";
+
   useEffect(() => {
     if (!initializing && user) {
       navigate("/mapa", { replace: true });
@@ -31,7 +35,10 @@ export default function AuthPage() {
             <img src="/Logo.svg" alt="Logo Hortalis" className="h-10" />
           </div>
 
-          <AuthForm onAuthSuccess={() => navigate("/mapa")} />
+          <AuthForm
+            initialMode={initialMode}
+            onAuthSuccess={() => navigate("/mapa")}
+          />
         </div>
       </div>
     </div>
