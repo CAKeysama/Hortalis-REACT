@@ -9,7 +9,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   useEffect(() => {
     if (!initializing && user) {
-      navigate("/home", { replace: true });
+      navigate("/mapa", { replace: true });
     }
   }, [user, initializing, navigate]);
 
@@ -31,7 +31,7 @@ export default function AuthPage() {
             <img src="/Logo.svg" alt="Logo Hortalis" className="h-10" />
           </div>
 
-          <AuthForm onAuthSuccess={() => navigate("/home")} />
+          <AuthForm onAuthSuccess={() => navigate("/mapa")} />
         </div>
       </div>
     </div>
